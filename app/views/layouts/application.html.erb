@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ideafactory</title>
+  <title>Idea Factory!</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+
+  <%# to include a group of CSS it must be in a manifest file inside assets/stylesheets. For example, if you have a file there called special.css then the line below will work if you register your files inside config/initializers/assets.rb %>
+  <%#= stylesheet_link_tag    'special', media: 'all', 'data-turbolinks-track' => true %>
+
+  <%# this includes the javascript application manifest file which in returns includes all the files if it contains require_tree . . The file is located inside assets/javascripts/applciation.js %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= yield %>
+  <%= link_to "Home", root_path %>
+  |
+  <%= link_to "All Ideas", ideas_path %>
+  |
+  <%= link_to "New Idea", new_idea_path %>
+  |
+  <% if user_signed_in? %>
+    <%# current user is a method from Devise that gives you the user %>
+    <%# object for the currently logged in user %>
+    Welcome <%= current_user.name_display %>,
+    <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
+  <% else %>
+    <%= link_to "Log In", new_user_session_path %> |
+    <%= link_to "Register", new_user_registration_path %>
+  <% end %>
+  <hr>
+  <%= flash[:notice] || flash[:alert] %>
+  <hr>
+
+  <%= yield %>
 
 </body>
 </html>

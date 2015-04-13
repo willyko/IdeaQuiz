@@ -1,0 +1,22 @@
+<% @ideas.each do |i| %>
+  <h3> <%= link_to i.title, idea_path(i) %> </h3>
+  <p> <%= i.body %> </p>
+  <p> By: <%=i.user.email%> </p>
+  <% joined = i.joineds.find_by_user_id(current_user.id) if user_signed_in? %>
+  <% if !joined %>
+    <%= button_to "Join", idea_joineds_path(i), method: :post %>
+  <% else %>
+    <%= button_to "Leave", idea_joined_path(i, joined), method: :delete %>
+  <% end %>
+
+  <% like = i.likes.find_by_user_id(current_user.id) if user_signed_in? %>
+  <% if !like %>
+    <%= button_to "Like", idea_likes_path(i), method: :post %>
+  <% else %>
+    <%= button_to "Unlike", idea_like_path(i, like), method: :delete %>
+  <% end %>
+
+  <p> Member(s): <%= i.joineds.count %> 
+      Like(s): <%= i.likes.count %>
+  </p>
+<% end %>

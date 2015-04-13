@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  devise_for :users
+  namespace :admin do
+    get 'ideas/index'
+  end
+
+  resources :ideas do
+    resources :comments, only: [:create, :destroy]
+    resources :likes, only: [:create, :destroy]
+    resources :joineds, only: [:create, :destroy]
+  end
+
+  root "ideas#index"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

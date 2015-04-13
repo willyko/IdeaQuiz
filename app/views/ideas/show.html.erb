@@ -1,0 +1,36 @@
+<h1><%= @idea.title %></h1>
+<p><%= @idea.body %></p>
+
+<%= button_to "Edit", edit_idea_path(@idea), method: :get %>
+<%= button_to "Delete", idea_path(@idea), method: :delete, data: {confirm: "Are you sure?"} %>
+
+<h3> Member List </h3>
+<% @idea.joineds.each do | mem | %>
+  <%=mem.user.email %>
+  <br>
+<% end %>
+
+<h2>Comments</h2>
+<% @idea.comments.each do |a| %>
+    <p>
+     <%= a.body %>
+     <%= button_to "Delete", idea_comment_path(@idea, a), method: :delete, data: {confirm: "Are you sure?"} %>
+     <% if a.user.present? %>
+   <p>by: <%= a.user.name_display %></p>
+ <% end %>
+ </p>
+ <hr>
+<% end %>
+<h2>Submit an comment</h2>
+<% if @comment.errors.any? %>
+  <ul>
+  <% @comment.errors.full_messages.each do |msg| %>
+  <li><%= msg %></li>
+  <% end %>
+  </ul>
+ <% end %>
+<%= form_for @comment, url: idea_comments_path(@idea) do |f| %>
+  <%= f.text_area :body, placeholder: "Put your comment here" %>
+  <br>
+  <%= f.submit "Submit Comment" %> 
+<% end %>
